@@ -1,8 +1,8 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal
+FROM registry.access.redhat.com/ubi8/openjdk-11
+ENV BOOTSTRAP_SERVERS my-cluster-kafka-bootstrap:9092
+ENV TOPIC my-topic
 WORKDIR /work/
-COPY target/*-runner /work/application
+COPY target/*.jar /work/app.jar
 COPY in_container_curl.sh /work/in_container_curl.sh
-RUN chmod +x in_container_curl.sh
-RUN chmod 775 /work
 EXPOSE 8080
-CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
+CMD java -jar app.jar -Dquarkus.http.host=0.0.0.0
